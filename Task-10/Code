@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <windows.h>
+#define COUNT 1000
+static DWORD WINAPI process_function(LPVOID arg)
+{
+    (void)arg;
+    return 0;
+}
+static DWORD WINAPI thread_function(LPVOID arg)
+{
+    (void)arg;
+    return 0;
+}
+static double elapsed(LARGE_INTEGER start,
+                      LARGE_INTEGER end,
+                      LARGE_INTEGER frequency)
+{
+    return (double)(end.QuadPart - start.QuadPart)
+           / frequency.QuadPart;
+}
+int main(void)
+{
+    LARGE_INTEGER start, end, frequency;
+    HANDLE handles[COUNT];
+    int created;
+    int i;
+    QueryPerformanceFrequency(&frequency);
+    /* Measure process creation and cleanup */
+    created = 0;
+    QueryPerformanceCounter(&start)
+    for (i = 0; i < COUNT; i++) {
+        STARTUPINFOA si;
+        PROCESS_INFORMATION pi;
+        char command[] = "cmd.exe /c exit 0";
+
+        ZeroMemory(&si, sizeof(si));
+        si.cb = sizeof(si);
+        ZeroMemory(&pi, sizeof(pi));
+        if (!CreateProcessA(
+                NULL, command, NULL, NULL, FALSE,
+                CREATE_NO_WINDOW, NULL, NULL, &si, &pi)) {
+            printf("Process creation failed at %d\n", i);
+            break;
+        }
+        CloseHandle(pi.hThread);
+        handles[created++] = pi.hProcess;
+    }
+    for (i = 0; i < created; i++) {
+        WaitForSingleObject(handles[i], INFINITE);
+        CloseHandle(handles[i]);
+    }
+    QueryPerformanceCounter(&end)
+    printf("Processes created: %d\n", created);
+    printf("Process creation and cleanup time: %.6f seconds\n",
+           elapsed(start, end, frequency));
+    /* Measure thread creation and cleanup */
+    created = 0;
+    QueryPerformanceCounter(&start)
+    for (i = 0; i < COUNT; i++) {
+        handles[created] = CreateThread(
+            NULL, 0, thread_function, NULL, 0, NULL);
+        if (handles[created] == NULL) {
+            printf("Thread creation failed at %d\n", i);
+            break;
+        }
+        created++;
+    }
+    for (i = 0; i < created; i++) {
+        WaitForSingleObject(handles[i], INFINITE);
+        CloseHandle(handles[i]);
+    }
+    QueryPerformanceCounter(&end);
+    printf("Threads created: %d\n", created);
+    printf("Thread creation and cleanup time: %.6f seconds\n",
+           elapsed(start, end, frequency));
+    return 0;
+}
