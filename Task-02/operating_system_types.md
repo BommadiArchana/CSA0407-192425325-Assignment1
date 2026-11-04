@@ -2,7 +2,7 @@
 
 ## 1. Introduction
 
-A smart hospital requires different operating-system types based on the performance, reliability, processing and availability needs of each computing environment.
+A smart hospital requires different operating-system types based on the performances, reliability, processing and availability needs of each computing environment.
 
 ## 2. Suitable Operating Systems for Each Environment
 
