@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <windows.h>
+int main(void)
+{
+    STARTUPINFOA si;
+    PROCESS_INFORMATION pi;
+    DWORD exitStatus;
+    ZeroMemory(&si, sizeof(si));
+    si.cb = sizeof(si);
+    ZeroMemory(&pi, sizeof(pi));
+    printf("shell: running job 1\n");
+    fflush(stdout);
+    char command1[] = "cmd.exe /c set /a 6*7";
+    if (!CreateProcessA(
+            NULL, command1, NULL, NULL, FALSE,
+            0, NULL, NULL, &si, &pi)) {
+        printf("Failed to start job 1\n");
+        return 1;
+    }
+    WaitForSingleObject(pi.hProcess, INFINITE);
+    GetExitCodeProcess(pi.hProcess, &exitStatus);
+    printf("job 1 exit status %lu\n",
+           (unsigned long)exitStatus);
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
+    printf("shell: running job 2\n");
+    fflush(stdout);
+    char command2[] = "cmd.exe /c exit 3";
+    if (!CreateProcessA(
+            NULL, command2, NULL, NULL, FALSE,
+            0, NULL, NULL, &si, &pi)) {
+        printf("Failed to start job 2\n");
+        return 1;
+    }
+    WaitForSingleObject(pi.hProcess, INFINITE);
+    GetExitCodeProcess(pi.hProcess, &exitStatus);
+    printf("job 2 exit status %lu\n",
+           (unsigned long)exitStatus);
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
+    return 0;
+}
