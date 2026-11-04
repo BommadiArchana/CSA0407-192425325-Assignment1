@@ -63,53 +63,6 @@ The following technologies and tools are used throughout the assignment:
 | Git | Version control and tracking project changes. |
 | GitHub | Repository management and assignment submission. |
 
-## 📂 Repository Structure
-
-The repository is organized into 12 individual task folders. Each folder contains its corresponding explanation, implementation and supporting evidence wherever required.
-
-```text
-CSA0407-192425325-Assignment1/
-│
-├── Task-01/
-│   └── README.md
-│
-├── Task-02/
-│   └── readme.md
-│
-├── Task-03/
-│   └── readme.md
-│
-├── Task-04/
-│   └── readme.md
-│
-├── Task-05/
-│   ├── readme.md
-│   └── system_calls.c
-│
-├── Task-06/
-│   └── readme.md
-│
-├── Task-07/
-│   └── readme.md
-│
-├── Task-08/
-│   └── readme.md
-│
-├── Task-09/
-│   └── readme.md
-│
-├── Task-10/
-│   └── readme.md
-│
-├── Task-11/
-│   └── readme.md
-│
-├── Task-12/
-│   └── readme.md
-│
-└── README.md
-```
-
 ## 🔍 Practical Analysis
 
 The practical components of this assignment focus on understanding how operating systems manage resources and execute operations.
